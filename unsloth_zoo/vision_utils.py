@@ -30,7 +30,7 @@
 # limitations under the License.
 from __future__ import annotations
 
-print("Using SOSE-NEENU branch vision_utils.py")
+print("hi")
 
 __all__ = [
     "process_vision_info",
