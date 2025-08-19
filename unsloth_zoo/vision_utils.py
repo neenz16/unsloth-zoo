@@ -70,7 +70,7 @@ import time
 import warnings
 from functools import lru_cache
 from io import BytesIO
-from typing import Optional
+from typing import Optional, Union
 
 import requests
 import torch
@@ -213,7 +213,7 @@ pass
 def smart_nframes(
     ele: dict,
     total_frames: int,
-    video_fps: int | float,
+    video_fps: Union[int, float],
 ) -> int:
     """calculate the number of frames for video used for model inputs.
 
@@ -454,11 +454,12 @@ def get_video_reader_backend() -> str:
         video_reader_backend = "decord"
     else:
         video_reader_backend = "torchvision"
-    print(f"vision_utils using {video_reader_backend} to read video.", file=sys.stderr)
+    if do_logging:    
+        print(f"Unsloth: vision_utils using {video_reader_backend} to read video.", file=sys.stderr)
     return video_reader_backend
 
 
-def fetch_video(ele: dict, image_factor: int = IMAGE_FACTOR, return_video_sample_fps: bool = False) -> torch.Tensor | list[Image.Image]:
+def fetch_video(ele: dict, image_factor: int = IMAGE_FACTOR, return_video_sample_fps: bool = False) -> Union[torch.Tensor, List[Image.Image]]:
     if isinstance(ele["video"], str):
         video_reader_backend = get_video_reader_backend()
         try:
@@ -534,9 +535,13 @@ pass
 # ) -> Tuple[Union[List[Image.Image], None], Union[List[Union[torch.Tensor, List[Image.Image]]], None]]:
 
 def process_vision_info(
-    conversations: list[dict] | list[list[dict]],
+    conversations: Union[List[dict], List[List[dict]]],
     return_video_kwargs: bool = False,
-) -> tuple[list[Image.Image] | None, list[torch.Tensor | list[Image.Image]] | None, Optional[dict]]:
+) -> tuple[
+    Optional[List[Image.Image]],
+    Optional[List[Union[torch.Tensor, List[Image.Image]]]],
+    Optional[dict]
+]:
 
     vision_infos = extract_vision_info(conversations)
     ## Read images or videos
