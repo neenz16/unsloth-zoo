@@ -28,9 +28,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from __future__ import annotations
+# from __future__ import annotations
 
-print("logging")
+print("do logging + no futre")
 
 __all__ = [
     "process_vision_info",
@@ -109,6 +109,8 @@ FPS_MAX_FRAMES = 768
 # Here, 128K represents the maximum number of input tokens for the VLLM model.
 # Remember to adjust it according to your own configuration.
 VIDEO_TOTAL_PIXELS = int(float(os.environ.get('VIDEO_MAX_PIXELS', 128000 * 28 * 28 * 0.9)))
+do_logging = os.environ.get("UNSLOTH_ENABLE_LOGGING", "0") == "1"
+
 if do_logging:
     logger.info(f"Unsloth: set VIDEO_TOTAL_PIXELS: {VIDEO_TOTAL_PIXELS}")
 
